@@ -1,0 +1,27 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<h1>My Cheeses</h1>
+
+<p><a asp-controller="Cheese" asp-action="Add">Add Cheese</a> || <a asp-controller="Cheese" asp-action="Remove">Remove Cheese</a></p>
+
+@if (ViewBag.Cheeses.Count == 0)
+{
+    <p>No cheeses yet.</p>
+}
+
+<table>
+    @foreach (KeyValuePair<string, string> cheese in ViewBag.Cheeses)
+    {
+        <tr>
+            <td><h4>@cheese.Key: </h4></td>
+        </tr>
+        <tr>
+            <td>@cheese.Value</td>
+        </tr>
+    }
+    
+</table>
