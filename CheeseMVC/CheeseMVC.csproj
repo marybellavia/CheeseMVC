@@ -11,4 +11,7 @@
   <ItemGroup>
     <Folder Include="Views\Cheese\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Models\CheeseController.cs" />
+  </ItemGroup>
 </Project>

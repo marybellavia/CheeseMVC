@@ -12,24 +12,25 @@
 }
 
 <form method="post">
-    @*<table>
-    @foreach (KeyValuePair<string, string> cheese in ViewBag.cheeses)
+    <table>
+    @foreach (Cheese cheese in ViewBag.cheeses)
     {
         <tr>
-            <td><h4>@cheese.Key: </h4></td>
-            <td><input type="checkbox" name="cheeseName" value="@cheese.Key"/></td>
+            <td><h4>@cheese.Name: </h4></td>
+            <td><input type="checkbox" name="cheeseName" value="@cheese.Name"/></td>
         </tr>
     }
         <tr>
             <td><input type="submit" value="Remove Cheese" /></td>
         </tr>
-      </table>
-    *@
+     </table>
+
+    <br /><br />
     
     <select name="cheeseName">
-    @foreach (KeyValuePair<string, string> cheese in ViewBag.cheeses)
+    @foreach (Cheese cheese in ViewBag.cheeses)
     {
-     <option name="@cheese.Key">@cheese.Key</option>        
+     <option name="@cheese.Name">@cheese.Name</option>        
     }
     </select>
     <input type="submit" value="Remove Cheese" />

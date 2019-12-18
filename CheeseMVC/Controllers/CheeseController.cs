@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using CheeseMVC.Models;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,7 +11,7 @@ namespace CheeseMVC.Controllers
 {
     public class CheeseController : Controller
     { 
-        static private Dictionary<string, string> Cheeses = new Dictionary<string, string>();
+        static private List<Cheese> Cheeses = new List<Cheese>();
 
 
         // GET: /<controller>/
@@ -31,7 +32,8 @@ namespace CheeseMVC.Controllers
         public IActionResult NewCheese(string name, string description)
         {
             // Add the new cheese to my existing cheeses
-            Cheeses.Add(name, description);
+            Cheese chz = new Cheese(name, description);
+            Cheeses.Add(chz);
 
             return Redirect("/Cheese");
         }
@@ -47,11 +49,18 @@ namespace CheeseMVC.Controllers
         [Route("/Cheese/Remove")]
         public IActionResult RemoveCheese(string[] cheeseName)
         {
-            foreach (string chz in cheeseName)
+            foreach (Cheese chzz in Cheeses.ToList())
             {
-                Cheeses.Remove(chz);
+                foreach (string ch in cheeseName)
+                {
+                    if (chzz.Name == ch)
+                    {
+                        Cheeses.Remove(chzz);
+                    }
+                }
+                
             }
-            
+
             return Redirect("/Cheese");
         }
     }
