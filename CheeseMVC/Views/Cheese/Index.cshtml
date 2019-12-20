@@ -13,15 +13,20 @@
     <p>No cheeses yet.</p>
 }
 
-<table>
-    @foreach (Cheese cheese in ViewBag.Cheeses)
-    {
+<form method="post">
+    <table class="table">
         <tr>
-            <td><h4>@cheese.Name: </h4></td>
+            <th>Name</th>
+            <th>Description</th>
         </tr>
-        <tr>
-            <td>@cheese.Description</td>
-        </tr>
-    }
+        @foreach (var cheese in ViewBag.cheeses)
+        {
+            <tr>
+                <td>@cheese.Name</td>
+                <td>@cheese.Description</td>
+            </tr>
+        }
     
-</table>
+    </table>
+    
+</form>

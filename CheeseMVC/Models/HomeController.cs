@@ -8,17 +8,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CheeseMVC.Models
 {
-    public class Cheese
+    public class HomeController : Controller
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public int CheeseId { get; set; }
-        private static int nextId = 1;
-
-        public Cheese()
+        // GET: /<controller>/
+        public IActionResult Index()
         {
-            CheeseId = nextId;
-            nextId++;
+            return View();
         }
     }
 }

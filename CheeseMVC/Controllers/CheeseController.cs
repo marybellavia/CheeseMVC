@@ -11,13 +11,10 @@ namespace CheeseMVC.Controllers
 {
     public class CheeseController : Controller
     { 
-        static private List<Cheese> Cheeses = new List<Cheese>();
-
-
         // GET: /<controller>/
         public IActionResult Index()
         {
-            ViewBag.cheeses = Cheeses;
+            ViewBag.cheeses = CheeseData.GetAll();
 
             return View();
         }
@@ -29,39 +26,37 @@ namespace CheeseMVC.Controllers
 
         [HttpPost]
         [Route("/Cheese/Add")]
-        public IActionResult NewCheese(string name, string description)
+        public IActionResult NewCheese(Cheese newCheese)
         {
-            // Add the new cheese to my existing cheeses
-            Cheese chz = new Cheese(name, description);
-            Cheeses.Add(chz);
 
-            return Redirect("/Cheese");
+            /* Cheese newCheese = new Cheese();
+             * newCheese.Name = Request.get("name");
+             * newCheeseDescription = Request.get("description");
+             */
+
+            // Add the new cheese to my existing cheeses
+            CheeseData.Add(newCheese);
+
+            return Redirect("/");
         }
 
         public IActionResult Remove()
         {
-            ViewBag.cheeses = Cheeses;
+            ViewBag.Title = "Remove Cheese";
+            ViewBag.cheeses = CheeseData.GetAll();
 
-            return View("Remove");
+            return View();
         }
 
         [HttpPost]
         [Route("/Cheese/Remove")]
-        public IActionResult RemoveCheese(string[] cheeseName)
+        public IActionResult RemoveCheese(int[] cheeseIds)
         {
-            foreach (Cheese chzz in Cheeses.ToList())
+            foreach (int cheeseId in cheeseIds)
             {
-                foreach (string ch in cheeseName)
-                {
-                    if (chzz.Name == ch)
-                    {
-                        Cheeses.Remove(chzz);
-                    }
-                }
-                
+                CheeseData.Remove(cheeseId);
             }
-
-            return Redirect("/Cheese");
+            return Redirect("/");
         }
     }
 }
