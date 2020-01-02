@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <Folder Include="Views\Cheese\" />
+    <Folder Include="ViewModels\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Models\CheeseController.cs" />

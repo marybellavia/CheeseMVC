@@ -1,22 +1,19 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-<form method="post">
-    <table>
-        <tr>
-            <td><label for="name">Cheese Name: </label></td>
-            <td><input name="name" type="text" /></td>
-        </tr>
-        <tr>
-            <td><label for="description">Cheese Description: </label></td>
-            <td><input type="text" name="description" /></td>
-        </tr>
-        <tr>
-            <td>
-                <input type="submit" value="Add Cheese" />
-            </td>
-        </tr>
-    </table>
+﻿@model CheeseMVC.ViewModels.AddCheeseViewModel
+
+
+<h1>Add a Cheese</h1>
+
+<form asp-controller="Cheese" asp-action="Add" method="post">
+
+    <div class="form-group">
+        <label asp-for="Name">Cheese Name</label>
+        <input class="form-control" asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </div>
+        <div class="form-group">
+        <label asp-for="Description">Description</label>
+        <input class="form-control" asp-for="Description" />
+        <span asp-validation-for="Description"></span>
+    </div>
+    <input type="submit" value="Add Cheese" />
 </form>
