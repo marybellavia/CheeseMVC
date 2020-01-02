@@ -10,7 +10,7 @@ using CheeseMVC.Models;
 namespace CheeseMVC.Controllers
 {
     public class CheeseController : Controller
-    { 
+    {
         // GET: /<controller>/
         public IActionResult Index()
         {
@@ -50,13 +50,29 @@ namespace CheeseMVC.Controllers
 
         [HttpPost]
         [Route("/Cheese/Remove")]
-        public IActionResult RemoveCheese(int[] cheeseIds)
+        public IActionResult Remove(int[] cheeseIds)
         {
             foreach (int cheeseId in cheeseIds)
             {
                 CheeseData.Remove(cheeseId);
             }
             return Redirect("/");
+        }
+
+        public IActionResult Edit(int cheeseId)
+        {
+            ViewBag.Cheese = CheeseData.GetById(cheeseId);
+            return View();
+        }
+
+        [HttpPost]
+        [Route("/Cheese/Edit")]
+        public IActionResult Edit(int cheeseId, string name, string description)
+        {
+            Cheese editedCheese = CheeseData.GetById(cheeseId);
+            editedCheese.Name = name;
+            editedCheese.Description = description;
+            return Redirect ("/");
         }
     }
 }

@@ -1,0 +1,22 @@
+﻿
+<h1>Edit Cheese: @ViewBag.Cheese.Name (@ViewBag.Cheese.CheeseId)</h1>
+
+<form method="post">
+    <table>
+        <tr>
+            <td><label for="name">Cheese Name: </label></td>
+            <td><input name="name" type="text" value="@ViewBag.Cheese.Name"/></td>
+        </tr>
+        <tr>
+            <td><label for="description">Cheese Description: </label></td>
+            <td><input type="text" name="description" value="@ViewBag.Cheese.Description" /></td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="Edit Cheese" />
+            </td>
+        </tr>
+    </table>
+    <input type="hidden" value="@ViewBag.cheese.CheeseId" name="id" />
+</form>
+
