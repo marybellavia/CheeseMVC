@@ -1,15 +1,27 @@
-﻿
-<h1>Edit Cheese: @ViewBag.Cheese.Name (@ViewBag.Cheese.CheeseId)</h1>
+﻿@model CheeseMVC.ViewModels.AddEditCheeseViewModel
 
-<form method="post">
+<h1>Edit Cheese: @Model.Name (id=@Model.CheeseId)</h1>
+
+<form asp-controller="Cheese" asp-action="Edit" method="post">
     <table>
         <tr>
-            <td><label for="name">Cheese Name: </label></td>
-            <td><input name="name" type="text" value="@ViewBag.Cheese.Name"/></td>
+            <td><label asp-for="Name">Cheese Name: </label></td>
+            <td><input asp-for="Name" type="text" value="@Model.Name"/></td>
+            <td><span asp-validation-for="Name"></span></td>
         </tr>
         <tr>
-            <td><label for="description">Cheese Description: </label></td>
-            <td><input type="text" name="description" value="@ViewBag.Cheese.Description" /></td>
+            <td><label asp-for="Description" >Cheese Description: </label></td>
+            <td><input type="text" asp-for="Description" value="@Model.Description"/></td>
+            <td><span asp-validation-for="Description"></span></td>
+        </tr>
+        <tr>
+            <td><label asp-for="Type"></label></td>
+            <td><select asp-for="Type" asp-items="@Model.CheeseTypes"></select></td>
+        </tr>
+        <tr>
+            <td><label asp-for="Rating">Rating: </label></td>
+            <td><input asp-for="Rating"/></td>
+            <td><span asp-validation-for="Rating"></span></td>
         </tr>
         <tr>
             <td>
@@ -17,6 +29,6 @@
             </td>
         </tr>
     </table>
-    <input type="hidden" value="@ViewBag.cheese.CheeseId" name="id" />
+    <input type="hidden" value="@Model.CheeseId" name="cheeseId" />
 </form>
 

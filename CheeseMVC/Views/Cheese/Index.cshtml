@@ -10,24 +10,29 @@
     <p>No cheeses yet.</p>
 }
 
-<form method="post">
+<form action="Cheese" method="post">
     <table class="table">
         <tr>
+            <th>Remove</th>
             <th>Name</th>
             <th>Description</th>
             <th>Type</th>
+            <th>Rating</th>
             <th>Edit Option</th>
         </tr>
         @foreach (var cheese in Model)
         {
             <tr>
+                
+                <td><input type="checkbox" name="cheeseIds" id="@cheese.CheeseId" value="@cheese.CheeseId"/></td>
                 <td>@cheese.Name</td>
                 <td>@cheese.Description</td>
                 <td>@cheese.Type</td>
+                <td>@cheese.Rating</td>
                 <td><a asp-controller="Cheese" asp-action="Edit" asp-route-cheeseId="@cheese.CheeseId">edit</a></td>
             </tr>
         }
-    
     </table>
+    <input type="submit" value="Remove Selected Cheese(s)" />
     
 </form>

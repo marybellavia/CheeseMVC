@@ -15,5 +15,6 @@
   <ItemGroup>
     <Compile Remove="Models\CheeseController.cs" />
     <Compile Remove="Models\HomeController.cs" />
+    <Compile Remove="ViewModels\EmptyClass.cs" />
   </ItemGroup>
 </Project>
