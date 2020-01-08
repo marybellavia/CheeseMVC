@@ -12,12 +12,14 @@
     <Folder Include="Views\Cheese\" />
     <Folder Include="ViewModels\" />
     <Folder Include="Data\" />
+    <Folder Include="Views\Category\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Models\CheeseController.cs" />
     <Compile Remove="Models\HomeController.cs" />
     <Compile Remove="ViewModels\EmptyClass.cs" />
     <Compile Remove="Models\CheeseData.cs" />
+    <Compile Remove="Models\CheeseType.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.0">
