@@ -15,44 +15,51 @@ namespace CheeseMVC.ViewModels
         [Required(ErrorMessage = "You must give your cheese a description")]
         public string Description { get; set; }
 
-        public CheeseType Type { get; set; }
+        [Required]
+        [Display(Name = "Category")]
+        public int CategoryID { get; set; }
+
+        public List<SelectListItem> Categories { get; set; }
 
         [Required]
         [Range(0,5, ErrorMessage = "Must select a number 0-5")]
         public int Rating { get; set; }
 
-        public List<SelectListItem> CheeseTypes { get; set; }
+        //public List<SelectListItem> CheeseTypes { get; set; }
 
-        public AddCheeseViewModel()
+        public AddCheeseViewModel() { }
+
+        public AddCheeseViewModel(IEnumerable<CheeseCategory> categories)
         {
-            CheeseTypes = new List<SelectListItem>();
+            Categories = new List<SelectListItem>();
 
-            CheeseTypes.Add(new SelectListItem
+            foreach (CheeseCategory chzcat in categories)
             {
-                Value = ((int)CheeseType.Hard).ToString(),
-                Text = CheeseType.Hard.ToString()
-            }) ;
+                Categories.Add(new SelectListItem
+                {
+                    Value = chzcat.ID.ToString(),
+                    Text = chzcat.Name
+                });
+            }
 
-            CheeseTypes.Add(new SelectListItem
-            {
-                Value = ((int)CheeseType.Soft).ToString(),
-                Text = CheeseType.Soft.ToString()
-            });
+            //CheeseTypes = new List<SelectListItem>();
 
-            CheeseTypes.Add(new SelectListItem
-            {
-                Value = ((int)CheeseType.Fake).ToString(),
-                Text = CheeseType.Fake.ToString()
-            });
+            //CheeseTypes.Add(new SelectListItem
+            //{
+            //    Value = ((int)CheeseType.Hard).ToString(),
+            //    Text = CheeseType.Hard.ToString()
+            //});
         }
 
-        public Cheese CreateCheese()
+
+
+        public Cheese CreateCheese(CheeseCategory newCheeseCategory)
         {
             return new Cheese
             {
                 Name = this.Name,
                 Description = this.Description,
-                Type = this.Type,
+                CategoryID = newCheeseCategory.ID,
                 Rating = this.Rating
             };
         }

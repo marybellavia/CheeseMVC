@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using CheeseMVC.Models;
 using CheeseMVC.ViewModels;
 using CheeseMVC.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CheeseMVC.Controllers
 {
@@ -22,14 +23,16 @@ namespace CheeseMVC.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            List<Cheese> cheeses = context.Cheeses.ToList();
+            // old call, from before chzcat database
+            //List<Cheese> cheeses = context.Cheeses.ToList();
 
+            IList<Cheese> cheeses = context.Cheeses.Include(c => c.Category).ToList();
             return View(cheeses);
         }
 
         public IActionResult Add()
         {
-            AddCheeseViewModel addCheeseViewModel = new AddCheeseViewModel();
+            AddCheeseViewModel addCheeseViewModel = new AddCheeseViewModel(context.Categories.ToList());
             return View(addCheeseViewModel);
         }
 
@@ -42,9 +45,12 @@ namespace CheeseMVC.Controllers
              * newCheeseDescription = Request.get("description");
              */
 
+            CheeseCategory newCheeseCategory =
+                    context.Categories.Single(c => c.ID == addCheeseViewModel.CategoryID);
+
             if (ModelState.IsValid)
             {
-                Cheese newCheese = addCheeseViewModel.CreateCheese();
+                Cheese newCheese = addCheeseViewModel.CreateCheese(newCheeseCategory);
                 // Add the new cheese to my existing cheeses
                 context.Cheeses.Add(newCheese);
                 context.SaveChanges();
@@ -92,7 +98,7 @@ namespace CheeseMVC.Controllers
 
                 editedCheese.Name = vm.Name;
                 editedCheese.Description = vm.Description;
-                editedCheese.Type = vm.Type;
+                editedCheese.CategoryID = vm.CategoryID;
                 editedCheese.Rating = vm.Rating;
 
                 context.SaveChanges();

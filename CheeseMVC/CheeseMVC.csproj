@@ -20,6 +20,7 @@
     <Compile Remove="ViewModels\EmptyClass.cs" />
     <Compile Remove="Models\CheeseData.cs" />
     <Compile Remove="Models\CheeseType.cs" />
+    <Compile Remove="Migrations\20200108193047_SecondMigration.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.0">
