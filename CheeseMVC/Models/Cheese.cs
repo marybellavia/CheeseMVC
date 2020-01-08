@@ -14,16 +14,6 @@ namespace CheeseMVC.Models
         public string Description { get; set; }
         public CheeseType Type { get; set; }
         public int Rating { get; set; }
-
-        public int CheeseId { get; set; }
-        private static int nextId = 1;
-
-        public Cheese()
-        {
-            CheeseId = nextId;
-            nextId++;
-
-            //Type = CheeseType.Hard;
-        }
+        public int ID { get; set; }
     }
 }

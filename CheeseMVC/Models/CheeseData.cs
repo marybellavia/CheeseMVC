@@ -30,7 +30,7 @@ namespace CheeseMVC.Models
         // Get by Id
         public static Cheese GetById(int id)
         {
-            return cheeses.Single(x => x.CheeseId == id);
+            return cheeses.Single(x => x.ID == id);
         }
     }
 }
