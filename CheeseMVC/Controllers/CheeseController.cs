@@ -83,7 +83,7 @@ namespace CheeseMVC.Controllers
             ViewBag.title = "Edit Cheese";
             Cheese chz = context.Cheeses.Single(c => c.ID == cheeseId);
 
-            AddEditCheeseViewModel vm = new AddEditCheeseViewModel(chz);
+            AddEditCheeseViewModel vm = new AddEditCheeseViewModel(chz, context.Categories.ToList());
 
             return View(vm);
         }
@@ -109,18 +109,5 @@ namespace CheeseMVC.Controllers
             return View(vm);
             
         }
-
-        //public IActionResult Category(int id)
-        //{
-        //    if (id == 0)
-        //    {
-        //        return Redirect("/Category");
-        //    }
-
-        //    CheeseCategory theCat = context.Categories.Include(cat => cat.Cheeses).Single(cat => cat.ID == id);
-
-        //    ViewBag.title = "Cheese in Category: " + theCat.Name;
-        //    return View("Index", theCat.Cheeses);
-        //}
     }
 }
