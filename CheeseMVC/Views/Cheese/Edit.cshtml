@@ -1,6 +1,6 @@
 ﻿@model CheeseMVC.ViewModels.AddEditCheeseViewModel
 
-<h1>Edit Cheese: @Model.Name (id=@Model.CheeseId)</h1>
+<h1>@ViewBag.title: @Model.Name (id=@Model.CheeseId)</h1>
 
 <form asp-controller="Cheese" asp-action="Edit" method="post">
     <div class="form-group">

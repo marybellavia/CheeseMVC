@@ -25,13 +25,14 @@ namespace CheeseMVC.Controllers
         {
             // old call, from before chzcat database
             //List<Cheese> cheeses = context.Cheeses.ToList();
-
+            ViewBag.title = "My Cheeses";
             IList<Cheese> cheeses = context.Cheeses.Include(c => c.Category).ToList();
             return View(cheeses);
         }
 
         public IActionResult Add()
         {
+            ViewBag.title = "Add a Cheese";
             AddCheeseViewModel addCheeseViewModel = new AddCheeseViewModel(context.Categories.ToList());
             return View(addCheeseViewModel);
         }
@@ -39,12 +40,11 @@ namespace CheeseMVC.Controllers
         [HttpPost]
         public IActionResult Add(AddCheeseViewModel addCheeseViewModel)
         {
-
+            ViewBag.title = "Add a Cheese";
             /* Cheese newCheese = new Cheese();
              * newCheese.Name = Request.get("name");
              * newCheeseDescription = Request.get("description");
              */
-
             CheeseCategory newCheeseCategory =
                     context.Categories.Single(c => c.ID == addCheeseViewModel.CategoryID);
 
@@ -80,6 +80,7 @@ namespace CheeseMVC.Controllers
 
         public IActionResult Edit(int cheeseId)
         {
+            ViewBag.title = "Edit Cheese";
             Cheese chz = context.Cheeses.Single(c => c.ID == cheeseId);
 
             AddEditCheeseViewModel vm = new AddEditCheeseViewModel(chz);
@@ -108,5 +109,18 @@ namespace CheeseMVC.Controllers
             return View(vm);
             
         }
+
+        //public IActionResult Category(int id)
+        //{
+        //    if (id == 0)
+        //    {
+        //        return Redirect("/Category");
+        //    }
+
+        //    CheeseCategory theCat = context.Categories.Include(cat => cat.Cheeses).Single(cat => cat.ID == id);
+
+        //    ViewBag.title = "Cheese in Category: " + theCat.Name;
+        //    return View("Index", theCat.Cheeses);
+        //}
     }
 }
