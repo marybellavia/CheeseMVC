@@ -40,7 +40,7 @@ namespace CheeseMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                CheeseCategory newCategory = new CheeseCategory() { Name = addCatViewModel.Name };
+                CheeseCategory newCategory = new CheeseCategory { Name = addCatViewModel.Name };
 
                 context.Categories.Add(newCategory);
                 context.SaveChanges();
