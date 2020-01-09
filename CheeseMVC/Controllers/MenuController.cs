@@ -69,7 +69,7 @@ namespace CheeseMVC.Controllers
                 Menu = menu
             };
 
-            ViewBag.title = "Menu";
+            ViewBag.title = "Menu: " + menu.Name;
 
             return View(viewMenuViewModel);
         }
@@ -83,7 +83,7 @@ namespace CheeseMVC.Controllers
             AddMenuItemViewModel addMenuItemViewModel =
                 new AddMenuItemViewModel(menu, cheeses);
 
-            ViewBag.title = "Add Item to Menu";
+            ViewBag.title = "Add Item to Menu: " + menu.Name;
 
             return View(addMenuItemViewModel);
         }
@@ -115,7 +115,7 @@ namespace CheeseMVC.Controllers
                 }
             }
 
-            return View(addMenuItemViewModel);
+            return Redirect("/Menu/ViewMenu/" + addMenuItemViewModel.MenuID);
         }
     }
 }

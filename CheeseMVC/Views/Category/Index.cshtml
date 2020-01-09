@@ -7,7 +7,11 @@
 <ul>
 @foreach (CheeseCategory chzcat in Model)
 {
-    <li>@chzcat.Name</li>
+    <li>
+        <a asp-controller="Category"
+           asp-action="ViewCategory"
+           asp-route-id="@chzcat.ID">@chzcat.Name</a>
+    </li>
 }
 </ul>
 

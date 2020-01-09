@@ -6,6 +6,7 @@ using CheeseMVC.Data;
 using CheeseMVC.Models;
 using CheeseMVC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 // For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -48,6 +49,29 @@ namespace CheeseMVC.Controllers
                 return Redirect("/Category");
             }
             return View(addCatViewModel);
+        }
+
+        public IActionResult ViewCategory(int id)
+        {
+
+            if (id == 0)
+            {
+                return Redirect("/Category");
+            }
+
+            CheeseCategory theCategory = context.Categories
+                .Include(cat => cat.Cheeses)
+                .Single(cat => cat.ID == id);
+
+            // To query for the cheeses from the other side of the relationship
+
+            /*
+             * IList<Cheese> theCheeses = context.Cheeses.Include(c => c.Category).Where(c => c.CategoryID == id).ToList();
+             */
+
+            ViewBag.title = "Cheeses in Category: " + theCategory.Name;
+
+            return View("ViewCategory", theCategory.Cheeses);
         }
     }
 }
