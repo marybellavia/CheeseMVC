@@ -18,7 +18,7 @@ namespace CheeseMVC.Controllers
         // this private field allows controller to access the database
         private readonly CheeseDbContext context;
         // actually setting value to this private field
-        public CheeseController(CheeseDbContext dbContext)
+        public MenuController(CheeseDbContext dbContext)
         {
             context = dbContext;
         }
