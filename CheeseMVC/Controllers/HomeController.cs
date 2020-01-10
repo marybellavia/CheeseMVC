@@ -9,6 +9,9 @@ using CheeseMVC.Models;
 
 namespace CheeseMVC.Controllers
 {
+
+    /* does nothing, we didn't add any functionality into the home controller for this project */
+
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

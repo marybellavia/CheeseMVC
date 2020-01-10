@@ -12,9 +12,9 @@ namespace CheeseMVC.Controllers
 {
     public class CheeseController : Controller
     {
-
-        private CheeseDbContext context;
-
+        // this private field allows controller to access the database
+        private readonly CheeseDbContext context;
+        // actually setting value to this private field
         public CheeseController(CheeseDbContext dbContext)
         {
             context = dbContext;
@@ -25,87 +25,128 @@ namespace CheeseMVC.Controllers
         {
             // old call, from before chzcat database
             //List<Cheese> cheeses = context.Cheeses.ToList();
+
+            // creating title for view
             ViewBag.title = "My Cheeses";
+            // getting my list of cheeses to pass into the view for display
+            /* need the .Include(c => c.Category) so we can pass the category object
+             * so we can pass the category objects into the view as well */
             IList<Cheese> cheeses = context.Cheeses.Include(c => c.Category).ToList();
+            // returning view with list of cheeses passed in
             return View(cheeses);
         }
 
+        // Add action for the GET request
         public IActionResult Add()
         {
+            // creating title for view
             ViewBag.title = "Add a Cheese";
+            /* using the viewmodel to access and proccess the information
+             * we created a constructor in AddCheeseViewModel that takes in a IEnumerable as
+             * a parameter so we can get a list of categories for the select options in the
+             * view */
             AddCheeseViewModel addCheeseViewModel = new AddCheeseViewModel(context.Categories.ToList());
+            // returning view with viewmodel passed in 
             return View(addCheeseViewModel);
         }
 
+        // Add action for the POST request to process inputs from form
         [HttpPost]
         public IActionResult Add(AddCheeseViewModel addCheeseViewModel)
         {
+            // creating title for view
             ViewBag.title = "Add a Cheese";
+
+            // this is all the work that the addCheeseViewModel is doing for us that we don't need code for
             /* Cheese newCheese = new Cheese();
              * newCheese.Name = Request.get("name");
              * newCheeseDescription = Request.get("description");
              */
+
+            /* creating a new cheese category object using info from the viewmodel
+             * to be used when constructing the new cheese object */
             CheeseCategory newCheeseCategory =
                     context.Categories.Single(c => c.ID == addCheeseViewModel.CategoryID);
 
+            // checking if the model/information the user input into the form is valid
             if (ModelState.IsValid)
             {
+                // creating the new cheese object
                 Cheese newCheese = addCheeseViewModel.CreateCheese(newCheeseCategory);
-                // Add the new cheese to my existing cheeses
+
+                // adding the new cheese to my existing cheeses and updating database
                 context.Cheeses.Add(newCheese);
                 context.SaveChanges();
 
+                //returning to index
                 return Redirect("/");
             }
-
+            // if model is not valid, re-rendering the form with error messages
             return View(addCheeseViewModel);
 
         }
-
+        // Remove option is in the index view, this processes the POST reuest to remove from the index view
         [HttpPost]
         [Route("/Cheese")]
         [Route("/Cheese/Index")]
         public IActionResult Remove(int[] cheeseIds)
         {
+            // used checkboxes, looping through list of cheeseIds
             foreach (int cheeseId in cheeseIds)
             {
+                // accessing the existing cheese object
                 Cheese theCheese = context.Cheeses.Single(c => c.ID == cheeseId);
+                // removing each cheese in the list from the database
                 context.Cheeses.Remove(theCheese);
             }
 
+            // saving changes to the database
             context.SaveChanges();
 
+            // redirecting back to the index to show cheese list without cheeses
             return Redirect("/Cheese/Index");
         }
 
+        // Edit view for the GET request
         public IActionResult Edit(int cheeseId)
         {
+            // creating title for view
             ViewBag.title = "Edit Cheese";
+            /* creating a variable to hold the cheese object based on what int
+             * cheeseId integer that came in with the GET request */
             Cheese chz = context.Cheeses.Single(c => c.ID == cheeseId);
-
+            /* creating a viewmodel using the chz object and IEnumerable list of categories
+             * IEnumerable list of categories needed to display select menu of
+             * cheese category choices in the view */
             AddEditCheeseViewModel vm = new AddEditCheeseViewModel(chz, context.Categories.ToList());
 
+            // returning view with the viewmodel passed in
             return View(vm);
         }
 
+        // Edit action for the POST request to process inputs from form
         [HttpPost]
         [Route("/Cheese/Edit")]
         public IActionResult Edit(AddEditCheeseViewModel vm)
         {
+            // checking if the model/information the user input into the form is valid
             if (ModelState.IsValid)
             {
+                // calling up the existing cheese from the database using the viewmodel for editing
                 Cheese editedCheese = context.Cheeses.Single(c => c.ID == vm.CheeseId);
-                //Cheese editedCheese = CheeseData.GetById(editCheeseViewModel.CheeseId);
 
+                // changing all the possible fields in the edit form using chz object and viewmodel
                 editedCheese.Name = vm.Name;
                 editedCheese.Description = vm.Description;
                 editedCheese.CategoryID = vm.CategoryID;
                 editedCheese.Rating = vm.Rating;
-
+                // saving changes to the database
                 context.SaveChanges();
-
+                //returning to index
                 return Redirect("/");
             }
+
+            // if model is not valid, re-rendering the form with error messages
             return View(vm);
             
         }
