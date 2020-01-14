@@ -81,8 +81,18 @@ namespace CheeseMVC.Controllers
                 //returning to index
                 return Redirect("/");
             }
+
+            /* needed for return showing error messages -- creating a new AddCheeseViewModel
+             * using the info from the addviewmodel passed into the view on the post request
+             * and also using the constructor to re-populate the list */
+            AddCheeseViewModel redoCheese = new AddCheeseViewModel(context.Categories.ToList())
+            {
+                Name = addCheeseViewModel.Name,
+                Description = addCheeseViewModel.Description,
+                Rating = addCheeseViewModel.Rating,
+            };
             // if model is not valid, re-rendering the form with error messages
-            return View(addCheeseViewModel);
+            return View(redoCheese);
 
         }
         // Remove option is in the index view, this processes the POST reuest to remove from the index view
