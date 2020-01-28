@@ -8,21 +8,28 @@ using CheeseMVC.ViewModels;
 using CheeseMVC.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace CheeseMVC.Controllers
 {
     public class CheeseController : Controller
     {
-        // this private field allows controller to access the database
+        // this private field allows controller to access the database and sets up identity
         private readonly CheeseDbContext context;
-        // actually setting value to this private field
-        public CheeseController(CheeseDbContext dbContext)
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
+
+        public CheeseController(CheeseDbContext dbContext,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager)
         {
             context = dbContext;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         // GET: /<controller>/
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             if (User.Identity.IsAuthenticated)
             {
@@ -32,10 +39,11 @@ namespace CheeseMVC.Controllers
                 // creating title for view
                 ViewBag.title = "My Cheeses";
                 ViewBag.user = HttpContext.User.Identity.Name;
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
                 // getting my list of cheeses to pass into the view for display
                 /* need the .Include(c => c.Category) so we can pass the category object
                  * so we can pass the category objects into the view as well */
-                IList<Cheese> cheeses = context.Cheeses.Include(c => c.Category).ToList();
+                IList<Cheese> cheeses = context.Cheeses.Include(c => c.Category).Where(c => c.User == currentUser).ToList();
                 // returning view with list of cheeses passed in
                 return View(cheeses);
             }
@@ -59,7 +67,7 @@ namespace CheeseMVC.Controllers
 
         // Add action for the POST request to process inputs from form
         [HttpPost]
-        public IActionResult Add(AddCheeseViewModel addCheeseViewModel)
+        public async Task<IActionResult> Add(AddCheeseViewModel addCheeseViewModel)
         {
             // creating title for view
             ViewBag.title = "Add a Cheese";
@@ -78,8 +86,10 @@ namespace CheeseMVC.Controllers
             // checking if the model/information the user input into the form is valid
             if (ModelState.IsValid)
             {
+                var currentUser = await _userManager.GetUserAsync(HttpContext.User);
+                // CANT FIGURE OUT HOW TO PARSE STRING ID TO INT
                 // creating the new cheese object
-                Cheese newCheese = addCheeseViewModel.CreateCheese(newCheeseCategory);
+                Cheese newCheese = addCheeseViewModel.CreateCheese(newCheeseCategory, currentUser);
 
                 // adding the new cheese to my existing cheeses and updating database
                 context.Cheeses.Add(newCheese);

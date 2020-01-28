@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CheeseMVC.Models
@@ -15,7 +17,9 @@ namespace CheeseMVC.Models
         public string Description { get; set; }
         public int Rating { get; set; }
 
-        public int UserID { get; set; }
+        // making this a foreignkey??
+        public IdentityUser User { get; set; }
+        //public int UserID { get; set; }
 
         /* how we relate Cheese objects to the Category
          * objects in a one-to-many relationship

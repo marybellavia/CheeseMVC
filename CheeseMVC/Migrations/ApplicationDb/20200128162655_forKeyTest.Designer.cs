@@ -6,11 +6,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace CheeseMVC.Migrations
+namespace CheeseMVC.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200128015929_ForKeyUser")]
-    partial class ForKeyUser
+    [Migration("20200128162655_forKeyTest")]
+    partial class forKeyTest
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

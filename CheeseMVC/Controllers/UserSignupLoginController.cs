@@ -14,7 +14,6 @@ namespace CheeseMVC.Controllers
 {
     public class UserSignupLoginController : Controller
     {
-
         // this private field allows controller to access the database and sets up identity
         private readonly CheeseDbContext context;
         private readonly UserManager<IdentityUser> _userManager;

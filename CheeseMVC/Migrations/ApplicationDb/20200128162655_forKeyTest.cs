@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CheeseMVC.Migrations
+namespace CheeseMVC.Migrations.ApplicationDb
 {
-    public partial class ForKeyUser : Migration
+    public partial class forKeyTest : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

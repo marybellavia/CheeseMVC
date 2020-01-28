@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using CheeseMVC.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CheeseMVC.ViewModels
@@ -57,14 +58,15 @@ namespace CheeseMVC.ViewModels
         }
 
         // helper function to create a new cheese
-        public Cheese CreateCheese(CheeseCategory newCheeseCategory)
+        public Cheese CreateCheese(CheeseCategory newCheeseCategory, IdentityUser currentUser)
         {
             return new Cheese
             {
                 Name = this.Name,
                 Description = this.Description,
                 CategoryID = newCheeseCategory.ID,
-                Rating = this.Rating
+                Rating = this.Rating,
+                User = currentUser
             };
         }
     }

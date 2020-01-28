@@ -1,8 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CheeseMVC.Migrations.CheeseDb
+namespace CheeseMVC.Migrations
 {
-    public partial class ForKeyUser : Migration
+    public partial class forKeyTest : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -17,6 +18,31 @@ namespace CheeseMVC.Migrations.CheeseDb
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IdentityUser",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    UserName = table.Column<string>(nullable: true),
+                    NormalizedUserName = table.Column<string>(nullable: true),
+                    Email = table.Column<string>(nullable: true),
+                    NormalizedEmail = table.Column<string>(nullable: true),
+                    EmailConfirmed = table.Column<bool>(nullable: false),
+                    PasswordHash = table.Column<string>(nullable: true),
+                    SecurityStamp = table.Column<string>(nullable: true),
+                    ConcurrencyStamp = table.Column<string>(nullable: true),
+                    PhoneNumber = table.Column<string>(nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
+                    LockoutEnabled = table.Column<bool>(nullable: false),
+                    AccessFailedCount = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IdentityUser", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -41,7 +67,7 @@ namespace CheeseMVC.Migrations.CheeseDb
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Rating = table.Column<int>(nullable: false),
-                    UserID = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: true),
                     CategoryID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -53,6 +79,12 @@ namespace CheeseMVC.Migrations.CheeseDb
                         principalTable: "Categories",
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Cheeses_IdentityUser_UserId",
+                        column: x => x.UserId,
+                        principalTable: "IdentityUser",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -88,6 +120,11 @@ namespace CheeseMVC.Migrations.CheeseDb
                 name: "IX_Cheeses_CategoryID",
                 table: "Cheeses",
                 column: "CategoryID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cheeses_UserId",
+                table: "Cheeses",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -103,6 +140,9 @@ namespace CheeseMVC.Migrations.CheeseDb
 
             migrationBuilder.DropTable(
                 name: "Categories");
+
+            migrationBuilder.DropTable(
+                name: "IdentityUser");
         }
     }
 }
