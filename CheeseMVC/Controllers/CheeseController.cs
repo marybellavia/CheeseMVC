@@ -7,6 +7,7 @@ using CheeseMVC.Models;
 using CheeseMVC.ViewModels;
 using CheeseMVC.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CheeseMVC.Controllers
 {
@@ -23,17 +24,23 @@ namespace CheeseMVC.Controllers
         // GET: /<controller>/
         public IActionResult Index()
         {
-            // old call, from before chzcat database
-            //List<Cheese> cheeses = context.Cheeses.ToList();
+            if (User.Identity.IsAuthenticated)
+            {
+                // old call, from before chzcat database
+                //List<Cheese> cheeses = context.Cheeses.ToList();
 
-            // creating title for view
-            ViewBag.title = "My Cheeses";
-            // getting my list of cheeses to pass into the view for display
-            /* need the .Include(c => c.Category) so we can pass the category object
-             * so we can pass the category objects into the view as well */
-            IList<Cheese> cheeses = context.Cheeses.Include(c => c.Category).ToList();
-            // returning view with list of cheeses passed in
-            return View(cheeses);
+                // creating title for view
+                ViewBag.title = "My Cheeses";
+                ViewBag.user = HttpContext.User.Identity.Name;
+                // getting my list of cheeses to pass into the view for display
+                /* need the .Include(c => c.Category) so we can pass the category object
+                 * so we can pass the category objects into the view as well */
+                IList<Cheese> cheeses = context.Cheeses.Include(c => c.Category).ToList();
+                // returning view with list of cheeses passed in
+                return View(cheeses);
+            }
+
+            return Redirect("UserSignupLogin");
         }
 
         // Add action for the GET request

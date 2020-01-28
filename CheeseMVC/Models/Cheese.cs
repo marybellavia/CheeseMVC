@@ -15,6 +15,8 @@ namespace CheeseMVC.Models
         public string Description { get; set; }
         public int Rating { get; set; }
 
+        public int UserID { get; set; }
+
         /* how we relate Cheese objects to the Category
          * objects in a one-to-many relationship
          */

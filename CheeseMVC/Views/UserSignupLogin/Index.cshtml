@@ -1,0 +1,66 @@
+﻿@model CheeseMVC.ViewModels.UserSignupLoginViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <div class="jumbotron bg-danger">
+                <h1 class="text-light text-center">About Foodoku</h1>
+                <p class="lead text-light">this will be a paragraph that describes the app</p>
+            </div>
+        </div>
+        <div class="col-6">
+                <div class="row">
+                    <div class="card">
+                        <h3 class="card-header bg-primary text-light text-center">Login</h3>
+                        <div class="card-body">
+                            <form asp-controller="UserSignupLogin" asp-action="LoginUser" method="post">
+                                <div class="card-text row form-group form-inline">
+                                    <label asp-for="@Model.LoginUserVM.Username" class="col-4 col-form-label">Username</label>
+                                    <input asp-for="@Model.LoginUserVM.Username" type="text" class="form-control" placeholder="Username" />
+                                    <span asp-validation-for="@Model.LoginUserVM.Username" class="text-danger"></span>
+                                    <label asp-for="@Model.LoginUserVM.Password" class="col-4 col-form-label">Password</label>
+                                    <input type="password" asp-for="@Model.LoginUserVM.Password" class="form-control" placeholder="Password">
+                                    <span asp-validation-for="@Model.LoginUserVM.Password" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <div class="card-text col-12 text-center">
+                                        <button type="submit" class="btn btn-primary">Login</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="card">
+                        <h3 class="card-header bg-secondary text-dark text-center">Sign Up</h3>
+                        <div class="card-body">
+                            <form asp-controller="UserSignupLogin" asp-action="AddUser" method="post">
+                                <div class="card-text row form-group form-inline">
+                                    <label asp-for="@Model.AddUserVM.Username" class="col-4 col-form-label">Username </label>
+                                    <input asp-for="@Model.AddUserVM.Username" type="text" class="form-control" placeholder="Username">
+                                    <span asp-validation-for="@Model.AddUserVM.Username" class="text-danger"></span>
+                                    <label asp-for="@Model.AddUserVM.Email" class="col-4 col-form-label">Email</label>
+                                    <input type="text" asp-for="@Model.AddUserVM.Email" class="form-control" placeholder="Email" />
+                                    <span asp-validation-for="@Model.AddUserVM.Email" class="text-danger"></span>
+                                    <label asp-for="@Model.AddUserVM.Password" class="col-4 col-form-label">Password</label>
+                                    <input type="password" asp-for="@Model.AddUserVM.Password" class="form-control" placeholder="Password">
+                                    <span asp-validation-for="@Model.AddUserVM.Password" class="text-danger"></span>
+                                    <label asp-for="@Model.AddUserVM.Verify" class="col-4 col-form-label">Verify Password</label>
+                                    <input type="password" asp-for="@Model.AddUserVM.Verify" class="form-control" placeholder="Verify Password">
+                                    <span asp-validation-for="@Model.AddUserVM.Verify" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <div class="card-text col-12 text-center">
+                                        <button type="submit" class="btn btn-secondary">Sign Up</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace CheeseMVC.Migrations
+namespace CheeseMVC.Migrations.CheeseDb
 {
-    public partial class StudioThree : Migration
+    public partial class ForKeyUser : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -41,6 +41,7 @@ namespace CheeseMVC.Migrations
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
                     Rating = table.Column<int>(nullable: false),
+                    UserID = table.Column<int>(nullable: false),
                     CategoryID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>

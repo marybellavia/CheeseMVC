@@ -32,6 +32,8 @@ namespace CheeseMVC.ViewModels
         // should link as a foreign key to Category object table
         public int CategoryID { get; set; }
 
+        public int UserID { get; set; }
+
         // creating a list of categories for select option in view
         public List<SelectListItem> Categories { get; set; }
 

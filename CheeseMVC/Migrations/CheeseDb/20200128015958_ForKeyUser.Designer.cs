@@ -5,17 +5,17 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace CheeseMVC.Migrations
+namespace CheeseMVC.Migrations.CheeseDb
 {
     [DbContext(typeof(CheeseDbContext))]
-    [Migration("20200109220513_StudioThree")]
-    partial class StudioThree
+    [Migration("20200128015958_ForKeyUser")]
+    partial class ForKeyUser
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.0");
+                .HasAnnotation("ProductVersion", "3.1.1");
 
             modelBuilder.Entity("CheeseMVC.Models.Cheese", b =>
                 {
@@ -33,6 +33,9 @@ namespace CheeseMVC.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Rating")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserID")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ID");

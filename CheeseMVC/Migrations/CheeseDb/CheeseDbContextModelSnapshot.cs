@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace CheeseMVC.Migrations
+namespace CheeseMVC.Migrations.CheeseDb
 {
     [DbContext(typeof(CheeseDbContext))]
     partial class CheeseDbContextModelSnapshot : ModelSnapshot
@@ -13,7 +13,7 @@ namespace CheeseMVC.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.0");
+                .HasAnnotation("ProductVersion", "3.1.1");
 
             modelBuilder.Entity("CheeseMVC.Models.Cheese", b =>
                 {
@@ -31,6 +31,9 @@ namespace CheeseMVC.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Rating")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("UserID")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("ID");
