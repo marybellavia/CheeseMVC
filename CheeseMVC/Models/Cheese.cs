@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CheeseMVC.Models
 {
-    public class Cheese
+    public class Cheese : Document
     {
 
         // basic properties for the Cheese object

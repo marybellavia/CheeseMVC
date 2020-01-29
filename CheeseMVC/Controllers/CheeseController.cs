@@ -7,33 +7,45 @@ using CheeseMVC.Models;
 using CheeseMVC.ViewModels;
 using CheeseMVC.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using CheeseMVC.Authorization;
 
 namespace CheeseMVC.Controllers
 {
     public class CheeseController : Controller
     {
         // this private field allows controller to access the database
-        private readonly CheeseDbContext context;
+        private CheeseDbContext Context { get; }
+        private IAuthorizationService AuthorizationService { get; }
+        private UserManager<IdentityUser> UserManager { get; }
         // actually setting value to this private field
-        public CheeseController(CheeseDbContext dbContext)
+        public CheeseController(CheeseDbContext dbContext,
+            IAuthorizationService authorizationService,
+            UserManager<IdentityUser> userManager) : base()
         {
-            context = dbContext;
+            Context = dbContext;
+            AuthorizationService = authorizationService;
+            UserManager = userManager;
         }
 
         // GET: /<controller>/
         public IActionResult Index()
         {
-            // old call, from before chzcat database
-            //List<Cheese> cheeses = context.Cheeses.ToList();
+            var cheeses = from c in Context.Cheeses
+                          select c;
 
-            // creating title for view
+            var isAuthorized = User.IsInRole(Constants.AdministratorsRole);
+
+            var currentUserId = UserManager.GetUserId(User);
+
+            if (!isAuthorized)
+            {
+                cheeses = cheeses.Where(c => c.UserID == currentUserId);
+            }
+
             ViewBag.title = "My Cheeses";
-            // getting my list of cheeses to pass into the view for display
-            /* need the .Include(c => c.Category) so we can pass the category object
-             * so we can pass the category objects into the view as well */
-            IList<Cheese> cheeses = context.Cheeses.Include(c => c.Category).ToList();
-            // returning view with list of cheeses passed in
-            return View(cheeses);
+            return View(cheeses.Include(c => c.Category).ToList());
         }
 
         // Add action for the GET request
@@ -45,55 +57,49 @@ namespace CheeseMVC.Controllers
              * we created a constructor in AddCheeseViewModel that takes in a IEnumerable as
              * a parameter so we can get a list of categories for the select options in the
              * view */
-            AddCheeseViewModel addCheeseViewModel = new AddCheeseViewModel(context.Categories.ToList());
+            AddCheeseViewModel addCheeseViewModel = new AddCheeseViewModel(Context.Categories.ToList());
             // returning view with viewmodel passed in 
             return View(addCheeseViewModel);
         }
 
         // Add action for the POST request to process inputs from form
         [HttpPost]
-        public IActionResult Add(AddCheeseViewModel addCheeseViewModel)
+        public async Task<IActionResult> Add(AddCheeseViewModel addCheeseViewModel)
         {
             // creating title for view
             ViewBag.title = "Add a Cheese";
 
-            // this is all the work that the addCheeseViewModel is doing for us that we don't need code for
-            /* Cheese newCheese = new Cheese();
-             * newCheese.Name = Request.get("name");
-             * newCheeseDescription = Request.get("description");
-             */
-
-            /* creating a new cheese category object using info from the viewmodel
-             * to be used when constructing the new cheese object */
-            CheeseCategory newCheeseCategory =
-                    context.Categories.Single(c => c.ID == addCheeseViewModel.CategoryID);
-
-            // checking if the model/information the user input into the form is valid
             if (ModelState.IsValid)
             {
-                // creating the new cheese object
-                Cheese newCheese = addCheeseViewModel.CreateCheese(newCheeseCategory);
+                CheeseCategory newCheeseCategory =
+                    Context.Categories.FirstOrDefault(c => c.ID == addCheeseViewModel.CategoryID);
 
-                // adding the new cheese to my existing cheeses and updating database
-                context.Cheeses.Add(newCheese);
-                context.SaveChanges();
+                Cheese newCheese = new Cheese()
+                {
+                    Name = addCheeseViewModel.Name,
+                    Description = addCheeseViewModel.Description,
+                    Rating = addCheeseViewModel.Rating,
+                    Category = newCheeseCategory,
+                    UserID = UserManager.GetUserId(User)
+                };
 
-                //returning to index
-                return Redirect("/");
+                var isAuthorized = await AuthorizationService.AuthorizeAsync(
+                                                    User, newCheese,
+                                                    CheeseOperations.Create);
+
+                if (!isAuthorized.Succeeded)
+                {
+                    return Forbid();
+                }
+
+                Context.Cheeses.Add(newCheese);
+                await Context.SaveChangesAsync();
+
+                return Redirect("/Cheese/Index");
+
             }
 
-            /* needed for return showing error messages -- creating a new AddCheeseViewModel
-             * using the info from the addviewmodel passed into the view on the post request
-             * and also using the constructor to re-populate the list */
-            AddCheeseViewModel redoCheese = new AddCheeseViewModel(context.Categories.ToList())
-            {
-                Name = addCheeseViewModel.Name,
-                Description = addCheeseViewModel.Description,
-                Rating = addCheeseViewModel.Rating,
-            };
-            // if model is not valid, re-rendering the form with error messages
-            return View(redoCheese);
-
+            return View(addCheeseViewModel);
         }
         // Remove option is in the index view, this processes the POST reuest to remove from the index view
         [HttpPost]
@@ -105,13 +111,13 @@ namespace CheeseMVC.Controllers
             foreach (int cheeseId in cheeseIds)
             {
                 // accessing the existing cheese object
-                Cheese theCheese = context.Cheeses.Single(c => c.ID == cheeseId);
+                Cheese theCheese = Context.Cheeses.Single(c => c.ID == cheeseId);
                 // removing each cheese in the list from the database
-                context.Cheeses.Remove(theCheese);
+                Context.Cheeses.Remove(theCheese);
             }
 
             // saving changes to the database
-            context.SaveChanges();
+            Context.SaveChanges();
 
             // redirecting back to the index to show cheese list without cheeses
             return Redirect("/Cheese/Index");
@@ -124,11 +130,11 @@ namespace CheeseMVC.Controllers
             ViewBag.title = "Edit Cheese";
             /* creating a variable to hold the cheese object based on what int
              * cheeseId integer that came in with the GET request */
-            Cheese chz = context.Cheeses.Single(c => c.ID == cheeseId);
+            Cheese chz = Context.Cheeses.Single(c => c.ID == cheeseId);
             /* creating a viewmodel using the chz object and IEnumerable list of categories
              * IEnumerable list of categories needed to display select menu of
              * cheese category choices in the view */
-            AddEditCheeseViewModel vm = new AddEditCheeseViewModel(chz, context.Categories.ToList());
+            AddEditCheeseViewModel vm = new AddEditCheeseViewModel(chz, Context.Categories.ToList());
 
             // returning view with the viewmodel passed in
             return View(vm);
@@ -143,7 +149,7 @@ namespace CheeseMVC.Controllers
             if (ModelState.IsValid)
             {
                 // calling up the existing cheese from the database using the viewmodel for editing
-                Cheese editedCheese = context.Cheeses.Single(c => c.ID == vm.CheeseId);
+                Cheese editedCheese = Context.Cheeses.Single(c => c.ID == vm.CheeseId);
 
                 // changing all the possible fields in the edit form using chz object and viewmodel
                 editedCheese.Name = vm.Name;
@@ -151,7 +157,7 @@ namespace CheeseMVC.Controllers
                 editedCheese.CategoryID = vm.CategoryID;
                 editedCheese.Rating = vm.Rating;
                 // saving changes to the database
-                context.SaveChanges();
+                Context.SaveChanges();
                 //returning to index
                 return Redirect("/");
             }
